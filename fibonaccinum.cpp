@@ -1,9 +1,10 @@
 // CPP program to find the Nth term
 // of Fibonacci series
 #include <iostream>
+#include "BigInt.hpp"
 using namespace std;
 
-unsigned long long int fib(int n, unsigned long long int* term)
+BigInt fib(int n, BigInt* term)
 {
 
     // base case
@@ -29,12 +30,12 @@ unsigned long long int fib(int n, unsigned long long int* term)
 }
 
 // Fibonacci Series using memoized Recursion
-unsigned long long int mfib(int n) {
-    unsigned long long int *term = new unsigned long long int[n+1];
+BigInt mfib(int n) {
+    BigInt *term = new BigInt[n+1];
     for (int i = 0; i <= n; i++) {
         term[i] = 0;
     }
-    unsigned long long int result = fib(n, term);
+    BigInt result = fib(n, term);
     delete[] term;
     return result;
 }
