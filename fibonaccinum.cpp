@@ -1,22 +1,33 @@
 // CPP program to find the Nth term
 // of Fibonacci series
 #include <iostream>
-#include "BigInt.hpp"
-using namespace std;
+#include "Bigint.h"
+using namespace Dodecahedron;
 
-BigInt fib(int n, BigInt* term)
+Bigint fib(int n, Bigint* term)
 {
-
+    Bigint d;
+    d = 0;
+    Bigint a;
     // base case
-    if (n <= 1)
-        return n;
+    if (n == 1){
+        a = 1;
+        return a;
+    }
+    if (n == 0) {
+        a = 0;
+        return a;
+    }
+       
 
     // if fib(n) has already been computed
     // we do not do further recursive calls
     // and hence reduce the number of repeated
     // work
-    if (term[n] != 0)
+    if (!(term[n] == d)) {
         return term[n];
+    }
+        
 
     else {
 
@@ -30,12 +41,12 @@ BigInt fib(int n, BigInt* term)
 }
 
 // Fibonacci Series using memoized Recursion
-BigInt mfib(int n) {
-    BigInt *term = new BigInt[n+1];
+Bigint mfib(int n) {
+    Bigint* term = new Bigint[n + 1];
     for (int i = 0; i <= n; i++) {
         term[i] = 0;
     }
-    BigInt result = fib(n, term);
+    Bigint result = fib(n, term);
     delete[] term;
     return result;
 }
@@ -45,7 +56,7 @@ BigInt mfib(int n) {
 // Driver Code
 int main()
 {
-    int n = 91;
-    cout << mfib(n);
+    int n = 110;
+    std::cout << mfib(n);
     return 0;
 }
