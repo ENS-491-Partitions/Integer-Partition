@@ -313,6 +313,9 @@ bool Bigint::operator!=(Bigint const &b) const
 Bigint Bigint::operator=(const long long &a)
 {
     number.clear();
+    if (a >= 0) {
+        positive = true;
+    }
     long long t = a;
     do {
         number.push_back((int) (t % base));
