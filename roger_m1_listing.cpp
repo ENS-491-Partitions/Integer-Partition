@@ -6,7 +6,6 @@
 
 using namespace std;
 
-// Function to generate all the partitions of n such that all parts differ by at least 2 and each partition is unique
 void generatePartitions(int n, int last, vector<int>& partition, vector<vector<int>>& partitions, unordered_set<string>& used)
 {
 	// Base case: If n is 0, add the current partition to the list of partitions
