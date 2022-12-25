@@ -49,14 +49,19 @@ int main()
 {
 	int n;
 
-	cout << "Please enter a number to give partitions: " << endl;
+	cout << "Please enter a number to give partitions: ";
 	cin >> n;
-
 
 	vector<int> partition;
 	vector<vector<int>> partitions;
 	unordered_set<string> used;
+	generatePartitions(n - 1, 0, partition, partitions, used);
+	for (int k = 0; k < partitions.size(); k++)
+	{
+		partitions[k].push_back(1);
+	}
 	generatePartitions(n, 0, partition, partitions, used);
+
 	// Print the partitions
 	for (int i = 0; i < partitions.size(); i++)
 	{
@@ -67,5 +72,6 @@ int main()
 		}
 		cout << endl;
 	}
+
 	return 0;
 }
