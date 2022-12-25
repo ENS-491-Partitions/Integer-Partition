@@ -47,11 +47,16 @@ void generatePartitions(int n, int last, vector<int>& partition, vector<vector<i
 
 int main()
 {
-	// List all the partitions of 4 such that all parts differ by at least 2 and each partition is unique
+	int n;
+
+	cout << "Please enter a number to give partitions: " << endl;
+	cin >> n;
+
+
 	vector<int> partition;
 	vector<vector<int>> partitions;
 	unordered_set<string> used;
-	generatePartitions(13, 0, partition, partitions, used);
+	generatePartitions(n, 0, partition, partitions, used);
 	// Print the partitions
 	for (int i = 0; i < partitions.size(); i++)
 	{
@@ -62,6 +67,5 @@ int main()
 		}
 		cout << endl;
 	}
-
 	return 0;
 }
