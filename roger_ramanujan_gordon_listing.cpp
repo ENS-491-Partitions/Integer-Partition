@@ -79,7 +79,7 @@ void rogerRG(int n, int m, int k, int a, vector<int> min) {
 			}
 		}
 	}
-	//printpartitions(n, m, k, a, RRGPartitions[n][m]);
+	printpartitions(n, m, k, a, RRGPartitions[n][m]);
 }
 
 
