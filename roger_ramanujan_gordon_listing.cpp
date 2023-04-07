@@ -1,16 +1,15 @@
-#include "bigint.h"
 #include <iostream>
 #include <vector>
-
+#include "bigint.h"
 using namespace std;
 
 vector<int> calculateMin(int m, int k) {
 	vector<int> min(m + 1, 0);
 	int sum = 0;
-	int buff = 1;
-	int resetCount = 0;
+	int buff = 1; //Integer with which to increase the sum on each iteration
+	int resetCount = 0; //Count on when to increment the buffer
 	for (int i = 1; i <= m; i++) {
-		if (resetCount == k-1) {
+		if (resetCount == k - 1) {
 			resetCount = 0;
 			buff += 2;
 		}
@@ -21,141 +20,82 @@ vector<int> calculateMin(int m, int k) {
 	return min;
 }
 
-int nextPart(int n, int m, int max, vector<int> min) {
-	int result = n - min[m - 1];
-	if (result > max) {
-		return max;
+void printpartitions(int n, int m, int k, int a, vector<vector<vector<int>>> Partitions) {
+	for (int i = 1; i <= a; i++) {
+		for (int j = 0; j < Partitions[i].size(); j++) {
+			for (int k = 0; k < Partitions[i][j].size(); k++) {
+				cout << Partitions[i][j][k] << " ";
+			}
+			cout << endl;
+		}
 	}
-	return result;
 }
 
-int getMaxNext(vector<int> partitions, int k, int pos) {
-	if (k == 2) {
-		return partitions[pos] - 2;
-	}
-	int previous = k - 2;
-	if (pos - previous < 1) {
-		return partitions[pos];
-	}
-	int previousTerm = partitions[pos - previous];
-	int currentTerm = partitions[pos];
-	if (previousTerm - currentTerm == 0) {
-		return currentTerm - 2;
-	}
-	else if (previousTerm - currentTerm == 1) {
-		return currentTerm - 1;
-	}
-	return currentTerm;
-}
-
-bool isLast(vector<int> partitions, int m, int k, int & pos) {
-	int gap = 1;
-	if (k == 2) {
-		for (int i = 1; i < m; i++) {
-			gap += 2;
-			if (partitions[m - i] - partitions[m] > gap) {
-				pos = m - i;
-				return false;
+void rogerRG(int n, int m, int k, int a, vector<int> min) {
+	vector<vector<vector<int>>> A_partitions(k+1);
+	vector<vector<vector<vector<vector<int>>>>> RRGPartitions (n+1);
+	int currentMaxParts = 0;
+	for (int i = 1; i <= n; i++) {
+		if (currentMaxParts < m) {
+			if (n >= min[currentMaxParts + 1]) {
+				currentMaxParts++;
 			}
 		}
-		return true;
+		vector<vector<vector<vector<int>>>> M_partitions(currentMaxParts+1, A_partitions);
+		RRGPartitions[i] = M_partitions;
 	}
-	int diff = k - 2;
-	for (int i = 1; i < m; i++) {
-		if (i+1 < k) {
-			gap = 1;
-		}
-		else {
-			gap = i+1 - diff;
-		}
-		if (partitions[m - i] - partitions[m] > gap) {
-			pos = m - i;
-			return false;
+	int stop = n - m;
+	int num = 0;
+	int num_parts = 0;
+	int one_constraint = 1;
+	vector<int> partition;
+	for (int i = 1; i < k; i++) {
+		partition.push_back(1);
+		num++;
+		num_parts++;
+		one_constraint++;
+		RRGPartitions[num][num_parts][one_constraint].push_back(partition);
+	}
+	for (int i = 1; i <= stop; i++) {
+		int max_parts = RRGPartitions[i].size();
+		for (int j = 1; j < max_parts; j++) {
+			for (int p = 1; p <= k; p++) {
+				//int max_ones = k - p;
+				for (int q = 0; q < RRGPartitions[i][j][p].size(); q++) {
+					vector<int> partition = RRGPartitions[i][j][p][q];
+					for (int r = 0; r < partition.size(); r++) {
+						partition[r]++;
+					}
+					RRGPartitions[i + j][j][1].push_back(partition);
+					int max = k-p+1;
+					if (m - j + 1 < k - p + 1) {
+						max = m - j + 1;
+					}
+					for (int r = 1; r < max; r++) {
+						partition.push_back(1);
+						RRGPartitions[i + j + r][j + r][r+1].push_back(partition);
+					}
+				}
+			}
 		}
 	}
-	return true;
+	//printpartitions(n, m, k, a, RRGPartitions[n][m]);
 }
 
-void printPartition(vector<int> partitions, int m) {
-	for (int i = 1; i <= m; i++) {
-		cout << partitions[i] << " ";
-	}
-	cout << endl;
-}
-
-void ListRRGpartitions(int n, int m, int k) {
-	if (m > n) {
-		cout << n << " has 0 partitions into " << m << " parts satisfying the provided constraints" << endl;
-		return;
-	}
-	if (k < 2) {
-		cout << "K has to be atleast 2 "<< endl;
-		return;
-	}
-	if (m == 1) {
-		cout << n << endl;
-		cout << "There is 1 partition of " << n << " into " << m << " part for k = " << k << endl;
-	}
-	vector<int> min = calculateMin(m, k);
-	if (n < min[m]) {
-		cout << n << " has 0 partitions into " << m << " parts satisfying the provided constraints" << endl;
-		return;
-	}
-	vector<int> partitions(m + 1, 0);
-	int pastSum = 0;
-	for (int i = 1; i <= m; i++) {
-		int result = 0;
-		if (i == 1) {
-			result = nextPart(n, m, n, min);
-		}
-		else {
-			result = nextPart(n - pastSum, (m + 1) - i, getMaxNext(partitions, k, i - 1), min);
-		}
-		partitions[i] = result;
-		pastSum += result;
-	}
-	printPartition(partitions, m);
-	Dodecahedron::Bigint count = 1;
-	int pos = 0;
-	while (!isLast(partitions, m, k, pos))
-	{
-		int remainder = 0;
-		pastSum = 0;
-		partitions[pos] = partitions[pos] - 1;
-		if (pos > m / 2) {
-			for (int i = 0; i < m - pos; i++) {
-				remainder += partitions[m - i];
-			}
-			remainder++;
-		}
-		else {
-			for (int i = 1; i <= pos; i++) {
-				pastSum += partitions[i];
-			}
-			remainder = n - pastSum;
-		}
-		for (int i = pos + 1; i <= m; i++) {
-			int result = nextPart(remainder, (m + 1) - i, getMaxNext(partitions, k, i - 1), min);
-			partitions[i] = result;
-			remainder -= result;
-		}
-		printPartition(partitions, m);
-		count =  count + 1;
-	}
-	cout << "There are " << count << " partitions of " << n << " into " << m << " parts for k = " << k << endl;
-}
 
 
 
 int main() {
-	//vector<int> test = calculateMin(3, 2);
-	int n, m, k;
+	int n, m, k, a;
 	cout << "Please enter the integer whose partitions you want to generate: ";
 	cin >> n;
 	cout << "Please enter the number of parts: ";
 	cin >> m;
 	cout << "Please enter the constraint k: ";
 	cin >> k;
-	ListRRGpartitions(n, m, k);
+	cout << "Please enter the constraint a: ";
+	cin >> a;
+	vector <int> min = calculateMin(m, k);
+	rogerRG(n, m, k, a, min);
 	return 1;
 }

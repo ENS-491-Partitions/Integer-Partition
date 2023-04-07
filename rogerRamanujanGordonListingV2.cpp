@@ -74,43 +74,6 @@ int getMaxNext(vector<int> partitions, int k, int pos) {
 	return currentTerm;
 }
 
-
-/***********************************************************************************************************
-params:
-partitions (vector<int>) => current Partition
-m (integer) => Number of parts
-k (integer) => Maximum count of occurence of two consecutive integers
-pos (integer) => If not last partition, it holds position of part to be decreased
-returns: True if last partition of a number by lexicographical order i.e, otherwise, false
-************************************************************************************************************/
-/*bool isLast(vector<int> partitions, int m, int k, int& pos, int n, vector<int> min) {
-	int gap = 1;
-	if (k == 2) {
-		for (int i = 1; i < m; i++) {
-			gap += 2;
-			if (partitions[m - i] - partitions[m] > gap) {
-				pos = m - i;
-				return false;
-			}
-		}
-		return true;
-	}
-	int diff = k - 2;
-	for (int i = 1; i < m; i++) {
-		if (i+1 < k) {
-			gap = 1;
-		}
-		else {
-			gap = i+1 - diff;
-		}
-		if (partitions[m - i] - partitions[m] > gap) {
-			pos = m - i;
-			return false;
-		}
-	}
-	return true;
-}*/
-
 void printPartition(vector<int> partitions, int m) {
 	for (int i = 1; i <= m; i++) {
 		cout << partitions[i] << " ";
@@ -197,71 +160,6 @@ void ListRRGpartitions(int n, int m, int k) {
 	}
 	cout << "There are " << count << " partitions of " << n << " into " << m << " parts for k = " << k << endl;
 }
-
-/*vector<vector<int>> testRRGpartitions(int n, int m, int k) {
-	vector<vector<int>> rrgpartitions;
-	if (m > n) {
-		cout << n << " has 0 partitions into " << m << " parts satisfying the provided constraints" << endl;
-		return rrgpartitions;
-	}
-	if (k < 2) {
-		cout << "K has to be atleast 2 " << endl;
-		return rrgpartitions;
-	}
-	if (m == 1) {
-		cout << n << endl;
-		cout << "There is 1 partition of " << n << " into " << m << " part for k = " << k << endl;
-	}
-	vector<int> min = calculateMin(m, k);
-	if (n < min[m]) {
-		cout << n << " has 0 partitions into " << m << " parts satisfying the provided constraints" << endl;
-		return rrgpartitions;
-	}
-	vector<int> partitions(m + 1, 0);
-	int pastSum = 0;
-	for (int i = 1; i <= m; i++) {
-		int result = 0;
-		if (i == 1) {
-			result = nextPart(n, m, n, min);
-		}
-		else {
-			result = nextPart(n - pastSum, (m + 1) - i, getMaxNext(partitions, k, i - 1), min);
-		}
-		partitions[i] = result;
-		pastSum += result;
-	}
-	rrgpartitions.push_back(partitions);
-	Dodecahedron::Bigint count = 1;
-	int pos = 0;
-	while (!isLast(partitions, m, k, pos, n, min))
-	{
-		int remainder = 0;
-		pastSum = 0;
-		partitions[pos] = partitions[pos] - 1;
-		if (pos > m / 2) {
-			for (int i = 0; i < m - pos; i++) {
-				remainder += partitions[m - i];
-			}
-			remainder++;
-		}
-		else {
-			for (int i = 1; i <= pos; i++) {
-				pastSum += partitions[i];
-			}
-			remainder = n - pastSum;
-		}
-		for (int i = pos + 1; i <= m; i++) {
-			int result = nextPart(remainder, (m + 1) - i, getMaxNext(partitions, k, i - 1), min);
-			partitions[i] = result;
-			remainder -= result;
-		}
-		rrgpartitions.push_back(partitions);
-		count = count + 1;
-	}
-	cout << "There are " << count << " partitions of " << n << " into " << m << " parts for k = " << k << endl;
-	return rrgpartitions;
-}*/
-
 
 
 int main() {
