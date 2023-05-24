@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Integer Partition Identity</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+
+    <script>
+      function showLoading() {
+        document.getElementById("output-box").style.display = "block";
+        document.getElementById("loading-animation").style.display =
+          "inline-block";
+        document.getElementById("result").style.display = "none";
+      }
+
+      function showResult() {
+        document.getElementById("output-box").style.display = "block";
+        document.getElementById("loading-animation").style.display = "none";
+        document.getElementById("result").style.display = "block";
+      }
+    </script>
+  </head>
+  <body>
+    <div class="navbar">
+      <ul class="navbar-list">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+    <div class="container">
+      <div class="form-box">
+        <h1>Partitions</h1>
+        <form method="POST" action="/" onsubmit="showLoading()">
+          <label for="selection">Select an option:</label>
+          <select name="selection" id="selection" required>
+            <option disabled selected value="">-- Select --</option>
+            <option value="roger_ramanujan">Roger Ramanujan</option>
+            <option value="roger_ramanujan_gordon">
+              Roger Ramanujan Gordon
+            </option>
+            <option value="capparelli">Capparelli</option>
+          </select>
+          <br />
+          <label for="integer">Integer:</label>
+          <input type="number" name="integer" required />
+          <br />
+          <label for="num_parts">Number of parts:</label>
+          <input type="number" name="num_parts" required />
+          <br />
+          <label for="distance">Distance:</label>
+          <input type="number" name="distance" disabled />
+          <br />
+          <label for="max_ones">Maximum number of ones:</label>
+          <input type="number" name="max_ones" disabled />
+          <br />
+          <div class="radio-group">
+            <label for="counter">
+              <input
+                type="radio"
+                id="counter"
+                name="algorithm"
+                value="counter"
+                required
+              />
+              Counter
+            </label>
+            <label for="generator">
+              <input
+                type="radio"
+                id="generator"
+                name="algorithm"
+                value="generator"
+                required
+              />
+              Generator
+            </label>
+          </div>
+          <br />
+          <input type="submit" value="Submit" />
+        </form>
+      </div>
+      <div id="output-box" class="output-box">
+        <div class="output-header">Result</div>
+        <div class="output-content">
+          <div id="loading-animation" class="loading-animation"></div>
+          <div id="result">
+            {% if counter_output %}
+            <p>{{ counter_output }}</p>
+            {% endif %} {% if generator_output %}
+            <ul class="result-list">
+              {% for item in generator_output %} {% set item_str =
+              item|map('string')|join(' + ') %}
+              <li>{{ item_str }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var selection = document.getElementById("selection");
+      var distance = document.getElementsByName("distance")[0];
+      var max_ones = document.getElementsByName("max_ones")[0];
+
+      selection.addEventListener("change", function () {
+        if (selection.value === "roger_ramanujan_gordon") {
+          distance.disabled = false;
+          max_ones.disabled = false;
+        } else {
+          distance.disabled = true;
+          max_ones.disabled = true;
+        }
+      });
+
+      window.onload = function () {
+        showLoading();
+        showResult();
+      };
+    </script>
+  </body>
+</html>
