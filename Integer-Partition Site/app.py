@@ -52,36 +52,5 @@ def index():
 
     return render_template('index.html')
 
-# Example counter functions
-def rrcounter(integer, parts):
-    # Perform counter logic for roger_ramanujan selection
-    return 1
-
-def rrgcounter(integer, parts, distance, max_ones):
-    # Perform counter logic for roger_ramanujan_gordon selection
-    # ...
-    return 1
-
-def capcounter(integer, parts):
-    # Perform counter logic for capparelli selection
-    # ...
-    return 1
-
-# Example generator functions
-def rrgenerator(integer, parts):
-    # Perform generator logic for roger_ramanujan selection
-    return [1]
-
-def rrggenerator(integer, parts, distance, max_ones):
-    # Perform generator logic for roger_ramanujan_gordon selection
-    for i in range(1,10000000):
-        print("")
-    return [1]
-
-def capgenerator(integer, parts):
-    # Perform generator logic for capparelli selection
-    # ...
-    return [1]
-
 if __name__ == '__main__':
     app.run(debug=True)
