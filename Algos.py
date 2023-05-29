@@ -160,98 +160,169 @@ def capcounter(num, num_parts):
         result = result + Capparelli_partitions[num_parts][num][k]
     return result
 
-def capgenerator(num, num_parts):
-    partitions = [[[1, 2, 2], [2]],[[1, 3, 3], [3]],[[1, 4, 4], [4]]]
-    result = []
-    while len(partitions) != 0:
-        partition = partitions[0]
-        details = partition[0]
-        ptn = partition[1]
-        n = details[1]
-        m = details[0]
-        k = details[2]
-        if (k < 4):
-            if (n + 3 * m <= num):
-                new_ptn = [(x + 3) for x in ptn]
-                if m == num_parts and n + 3 * m == num:
-                    result.append(new_ptn.copy())
-                else:
-                    partitions.append([[m, n+(3*m), k+3], new_ptn.copy()])
-        elif k == 4:
-            if (m + 1 <=  num_parts and n + 2 <= num):
-                two_partition = [2]
-                two_partition.extend(ptn)
-                if m + 1 == num_parts and n + 2 == num:
-                    result.append(two_partition.copy())
-                else:
-                    partitions.append([[m + 1, n+ 2, 2], two_partition.copy()]) 
-                if (n + 3 * m <= num):
-                    new_ptn = [( x + 3 ) for x in ptn]
-                    if m == num_parts and n + 3 * m == num:
-                        result.append(new_ptn.copy())
-                    else:
-                        partitions.append([[m, n+(3*m), 6], new_ptn.copy()])
-            elif (n + 3 * m <= num):
-                new_ptn = [( x + 3 ) for x in ptn]
-                if m == num_parts and n + 3 * m == num:
-                    result.append(new_ptn.copy())
-                else:
-                    partitions.append([[m, n+(3*m), 6], new_ptn.copy()])
-        elif k == 5:
-            if (n + 3 * m <= num):
-                new_ptn = [(x + 3) for x in ptn]
-                if m == num_parts and n + 3 * m == num:
-                    result.append(new_ptn.copy())
-                else:
-                    partitions.append([[m, n+(3*m), 6], new_ptn.copy()])
-                if (m + 1 <= num_parts and n + (3 * m) + 4 <= num):
-                    four_partition = [4]
-                    four_partition.extend(new_ptn)
-                    if m + 1 == num_parts and n + (3 * m) + 4 == num:
-                        result.append(four_partition.copy())
-                    else:
-                        partitions.append([[m + 1, n+(3*m) + 4, 4], four_partition.copy()])
-        elif k == 6:
-            if (m + 1 <= num_parts and n + 2 <= num):
-                two_partition = [2]
-                two_partition.extend(ptn)
-                if m + 1 == num_parts and n + 2 == num:
-                    result.append(two_partition.copy())
-                else:
-                    partitions.append([[m + 1, n+ 2, 2], two_partition.copy()]) 
-                if n + 3 <= num:
-                    three_partition = [3]
-                    three_partition.extend(ptn)
-                    if m + 1 == num_parts and n + 3 == num:
-                        result.append(three_partition.copy())
-                    else:
-                        partitions.append([[m + 1, n+ 3, 3], three_partition.copy()]) 
-                    if n + (3 * m) <= num:
-                        new_ptn = [(x+3) for x in ptn]
-                        if m == num_parts and n + 3 * m == num:
-                            result.append(new_ptn.copy())
-                        else:
-                            partitions.append([[m, n+(3*m), 6], new_ptn.copy()])
-                        if (m + 1 <= num_parts and n + (3 * m) + 4 <= num):
-                            four_partition = [4]
-                            four_partition.extend(new_ptn)
-                            if m + 1 == num_parts and n + (3 * m) + 4 == num:
-                                result.append(four_partition.copy())
-                            else:
-                                partitions.append([[m + 1, n+(3*m) + 4, 4], four_partition.copy()])
-            elif (n + (3 * m) <= num):
-                new_ptn = [(x+3) for x in ptn]
-                if m == num_parts and n + 3 * m == num:
-                    result.append(new_ptn.copy())
-                else:
-                    partitions.append([[m, n+(3*m), 6], new_ptn.copy()])
-                if (m + 1 <= num_parts and n + (3 * m) + 4 <= num):
-                    four_partition = [4]
-                    four_partition.extend(new_ptn)
-                    if m + 1 == num_parts and n + (3 * m) + 4 == num:
-                        result.append(four_partition.copy())
-                    else:
-                        partitions.append([[m + 1, n+(3*m) + 4, 4], four_partition.copy()])
+def capgenerator(n, m):
+    Capparelli_partitions = [[[[] for _ in range(7)] for _ in range(n + 1)] for _ in range(m + 1)]
 
-        partitions = partitions[1:]
+    # Preallocate frequently accessed lists
+
+    # Base cases
+    Capparelli_partitions[1][2][2] = [[2]]
+    Capparelli_partitions[1][3][3] = [[3]]
+    Capparelli_partitions[1][4][4] = [[4]]
+
+    # Dynamic programming loop
+    for i in range(1, m + 1):
+        for j in range(2, n + 1):
+            for k in range(2, 7):
+                partition_list = Capparelli_partitions[i][j][k]  # Local variable for faster access
+
+                if k < 4 and j + 3 * i <= n:
+                    new_partition_list = []
+                    for partition in partition_list:
+                        new_partition = [part + 3 for part in partition]
+                        new_partition_list.append(new_partition)
+                    Capparelli_partitions[i][j + 3 * i][k + 3].extend(new_partition_list)
+
+                elif k == 4:
+                    if i + 1 <= m and j + 2 <= n:
+                        two_partition_list = [[2] + partition for partition in partition_list]
+                        Capparelli_partitions[i + 1][j + 2][2].extend(two_partition_list)
+                        if j + 3 * i <= n:
+                            new_partition_list = []
+                            for partition in partition_list:
+                                new_partition = [part + 3 for part in partition]
+                                new_partition_list.append(new_partition)
+                            Capparelli_partitions[i][j + 3 * i][6].extend(new_partition_list)
+                    elif j + 3 * i <= n:
+                        new_partition_list = []
+                        for partition in partition_list:
+                            new_partition = [part + 3 for part in partition]
+                            new_partition_list.append(new_partition)
+                        Capparelli_partitions[i][j + 3 * i][6].extend(new_partition_list)
+
+                elif k == 5:
+                    if j + 3 * i <= n:
+                        new_partition_list = []
+                        for partition in partition_list:
+                            new_partition = [part + 3 for part in partition]
+                            new_partition_list.append(new_partition)
+                        Capparelli_partitions[i][j + 3 * i][6].extend(new_partition_list)
+                        if i + 1 <= m and j + 3 * i + 4 <= n:
+                            four_partition_list = [[4] + new_partition for new_partition in new_partition_list]
+                            Capparelli_partitions[i + 1][j + 3 * i + 4][4].extend(four_partition_list)
+
+                elif k == 6:
+                    if i + 1 <= m and j + 2 <= n:
+                        two_partition_list = [[2] + partition for partition in partition_list]
+                        Capparelli_partitions[i + 1][j + 2][2].extend(two_partition_list)
+                        if j + 3 <= n:
+                            three_partition_list = [[3] + partition for partition in partition_list]
+                            Capparelli_partitions[i + 1][j + 3][3].extend(three_partition_list)
+                            if j + 3 * i <= n:
+                                new_partition_list = []
+                                for partition in partition_list:
+                                    new_partition = [part + 3 for part in partition]
+                                    new_partition_list.append(new_partition)
+                                Capparelli_partitions[i][j + 3 * i][6].extend(new_partition_list)
+                                if j + 3 * i + 4 <= n:
+                                    four_partition_list = [[4] + new_partition for new_partition in new_partition_list]
+                                    Capparelli_partitions[i + 1][j + 3 * i + 4][4].extend(four_partition_list)
+                    elif j + 3 * i <= n:
+                        new_partition_list = []
+                        for partition in partition_list:
+                            new_partition = [part + 3 for part in partition]
+                            new_partition_list.append(new_partition)
+                        Capparelli_partitions[i][j + 3 * i][6].extend(new_partition_list)
+                        if i + 1 <= m and j + 3 * i + 4 <= n:
+                            four_partition_list = [[4] + new_partition for new_partition in new_partition_list]
+                            Capparelli_partitions[i + 1][j + 3 * i + 4][4].extend(four_partition_list)
+
+    # Flatten and return the result
+    result = [partition for k in range(2, 7) for partition in Capparelli_partitions[m][n][k]]
     return result
+
+def cappgenerator(n, m):
+  Capparelli_partitions = [[[[] for i in range(7)] for j in range(n+1)] for k in range(m+1)]  
+  Capparelli_partitions[1][2][2].append([2])
+  Capparelli_partitions[1][3][3].append([3])
+  Capparelli_partitions[1][4][4].append([4])
+  for i in range(1, m+1):
+      for j in range(2, n+1):
+          for k in range(2, 7):
+              if k < 4:
+                  if (j + 3 * i <= n):
+                      for partition in Capparelli_partitions[i][j][k]:
+                          new_partition = []
+                          for part in partition:
+                              temp = part + 3
+                              new_partition.append(temp)
+                          Capparelli_partitions[i][j+(3*i)][k+3].append(new_partition)
+              elif k == 4:
+                  if (i + 1 <= m and j + 2 <= n):
+                      for partition in Capparelli_partitions[i][j][k]:
+                          two_partition = [2]
+                          two_partition.extend(partition)
+                          Capparelli_partitions[i+1][j+2][2].append(two_partition)
+                          if (j + 3 * i <= n):
+                              new_partition = []
+                              for part in partition:
+                                  temp = part + 3
+                                  new_partition.append(temp)
+                              Capparelli_partitions[i][j+(3*i)][6].append(new_partition)
+                  elif(j + 3 * i <= n):
+                      for partition in Capparelli_partitions[i][j][k]:
+                          new_partition = []
+                          for part in partition:
+                              temp = part + 3
+                              new_partition.append(temp)
+                          Capparelli_partitions[i][j+(3*i)][6].append(new_partition)
+              elif k == 5:
+                  if (j+(3*i)<=n):
+                      for partition in Capparelli_partitions[i][j][k]:
+                          new_partition = []
+                          for part in partition:
+                              temp = part + 3
+                              new_partition.append(temp)
+                          Capparelli_partitions[i][j+(3*i)][6].append(new_partition)
+                          if (i+1<=m and j+(3*i)+4<=n):
+                              four_partition = [4]
+                              four_partition.extend(new_partition)
+                              Capparelli_partitions[i+1][j+(3*i)+4][4].append(four_partition)
+              elif k == 6:
+                  if (i + 1 <= m and j + 2 <= n):
+                      for partition in Capparelli_partitions[i][j][k]:
+                          two_partition = [2]
+                          two_partition.extend(partition)
+                          Capparelli_partitions[i+1][j+2][2].append(two_partition)
+                          if (j + 3 <= n):
+                              three_partition = [3]
+                              three_partition.extend(partition)
+                              Capparelli_partitions[i+1][j+3][3].append(three_partition)
+                              if (j + (3 * i) <= n):
+                                  new_partition = []
+                                  for part in partition:
+                                      temp = part + 3
+                                      new_partition.append(temp)
+                                  Capparelli_partitions[i][j+(3*i)][6].append(new_partition)
+                                  if (j + (3*i)+4 <= n):
+                                      four_partition = [4]
+                                      four_partition.extend(new_partition)
+                                      Capparelli_partitions[i+1][j+(3*i)+4][4].append(four_partition)
+                  elif (j + (3 * i) <= n):
+                      for partition in Capparelli_partitions[i][j][k]:
+                        new_partition = []
+                        for part in partition:
+                            temp = part + 3
+                            new_partition.append(temp)
+                        Capparelli_partitions[i][j+(3*i)][6].append(new_partition)
+                        if (i + 1 <= m and j + (3*i)+4 <= n):
+                            four_partition = [4]
+                            four_partition.extend(new_partition)
+                            Capparelli_partitions[i+1][j+(3*i)+4][4].append(four_partition)
+
+  result =[]
+  for k in range(2, 7):
+      for partition in Capparelli_partitions[m][n][k]:
+          result.append(partition)
+
+  return result
