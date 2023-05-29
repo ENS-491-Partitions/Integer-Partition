@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Integer Partition Identity</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <div class="navbar">
+      <ul class="navbar-list">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </div>
+
+    <h1>Efficient Integer Partition Counter and Generator</h1>
+    <p>
+      An integer partition of a positive integer is a non-increasing sequence of 
+      positive integers the sum of which is n. For example, 4 has 5 partitions:<br><br>
+      4 = 4<br>
+      = 3+1<br>
+      = 2+2<br>
+      = 2+1+1<br>
+      = 1+1+1+1.<br><br>
+      Different constraints may be applied on partitions, such as distinct parts. 
+      For example, 6 has 4 partitions into distinct parts:<br><br>
+      6 = 6<br>
+      = 5+1<br>
+      = 4+2<br>
+      = 3+2+1.<br><br>
+      Or, 9 has 5 partitions into parts that are either 1 or 4 modulo 5:<br><br>
+      9 = 9<br>
+      = 6+1+1+1<br>
+      = 4+4+1<br>
+      = 4+1+1+1+1+1<br>
+      = 1+1+1+1+1+1+1+1+1<br><br>
+      Finding partition numbers is a theoretically difficult problem. 
+      Listing all such partitions is another difficult problem. 
+      Listing all partitions and eliminating those which do not satisfy the 
+      given constraint is an unwanted solution, because the redundancy is too big.<br><br>
+      Once the students get familiar with integer partitions, they will develop algorithms to accommodate a broad range of conditions 
+      to find partition numbers as well as algorithms to list those partitions. 
+      Then, they will design a web interface to offer these (hopefully efficient) algorithms to researchers worldwide.<br><br>
+    </p>
+  </body>
+</html>
